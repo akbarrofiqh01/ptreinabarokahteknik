@@ -7,10 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title')</title>
-    <link rel="icon" type="image/png" href="{{ asset('assets/backend/images/favicon.png') }}" sizes="16x16">
+    <link rel="icon" type="image/png" href="{{ asset('assets/backend/logosaja.png') }}" sizes="16x16">
     <link rel="stylesheet" href="{{ asset('assets/backend/css/remixicon.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/backend/css/lib/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/backend/css/lib/apexcharts.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('assets/backend/css/lib/apexcharts.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('assets/backend/css/lib/dataTables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/backend/css/lib/editor-katex.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/backend/css/lib/editor.atom-one-dark.min.css') }}">
@@ -147,7 +147,7 @@
 
     <!-- jQuery library js -->
     <script src="{{ asset('assets/backend/js/lib/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('assets/backend/js/lib/apexcharts.min.js') }}"></script>
+    {{-- <script src="{{ asset('assets/backend/js/lib/apexcharts.min.js') }}"></script> --}}
     <script src="{{ asset('assets/backend/js/lib/dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/lib/iconify-icon.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/lib/jquery-ui.min.js') }}"></script>
@@ -159,7 +159,7 @@
     <script src="{{ asset('assets/backend/js/lib/file-upload.js') }}"></script>
     <script src="{{ asset('assets/backend/js/lib/audioplayer.js') }}"></script>
     <script src="{{ asset('assets/backend/js/app.js') }}"></script>
-    <script src="{{ asset('assets/backend/js/homeOneChart.js') }}"></script>
+    {{-- <script src="{{ asset('assets/backend/js/homeOneChart.js') }}"></script> --}}
     <script>
         $("#dinamicModals").on("show.bs.modal", function(e) {
             var link = $(e.relatedTarget);

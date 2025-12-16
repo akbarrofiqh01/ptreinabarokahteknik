@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Roles - Siakad')
+@section('title', 'Roles - PT Reina Barokah Teknik')
 @section('title-content', 'Roles')
 @section('content')
     <div class="row gy-4">

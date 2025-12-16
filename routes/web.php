@@ -37,8 +37,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/pengaturan/roles/updateRoles{roleCode}', [RoleController::class, 'update'])->name('roles.update');
     Route::delete('/pengaturan/roles/deleteRoles/{roleCode}', [RoleController::class, 'destroy']);
 
-    Route::get('/pengaturan/users', [UserController::class, 'index'])->name('users.list');
-    Route::get('/pengaturan/users/tambahUser', [UserController::class, 'create'])->name('users.create');
+    Route::get('/users/data-user', [UserController::class, 'index'])->name('users.list');
+    Route::get('/users/tambahUser', [UserController::class, 'create'])->name('users.create');
     Route::get('/pengaturan/users/editUser/{usercode}', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/pengaturan/users/newUser', [UserController::class, 'store'])->name('users.store');
     Route::put('/pengaturan/users/updateUser/{usercode}', [UserController::class, 'update'])->name('users.update');

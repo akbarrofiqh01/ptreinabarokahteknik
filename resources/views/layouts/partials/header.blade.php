@@ -47,7 +47,8 @@
                                 <div
                                     class="text-black hover-bg-transparent hover-text-primary d-flex align-items-center gap-3">
                                     <span class="w-40-px h-40-px rounded-circle flex-shrink-0 position-relative">
-                                        <img src="assets/images/notification/profile-3.png" alt="Image">
+                                        <img src="{{ asset('assets/backend/images/notification/profile-3.png') }}"
+                                            alt="Image">
                                         <span
                                             class="w-8-px h-8-px bg-success-main rounded-circle position-absolute end-0 bottom-0"></span>
                                     </span>
@@ -69,7 +70,8 @@
                                 <div
                                     class="text-black hover-bg-transparent hover-text-primary d-flex align-items-center gap-3">
                                     <span class="w-40-px h-40-px rounded-circle flex-shrink-0 position-relative">
-                                        <img src="assets/images/notification/profile-4.png" alt="Image">
+                                        <img src="{{ asset('assets/backend/images/notification/profile-4.png') }}"
+                                            alt="Image">
                                         <span
                                             class="w-8-px h-8-px  bg-neutral-300 rounded-circle position-absolute end-0 bottom-0"></span>
                                     </span>
@@ -91,7 +93,8 @@
                                 <div
                                     class="text-black hover-bg-transparent hover-text-primary d-flex align-items-center gap-3">
                                     <span class="w-40-px h-40-px rounded-circle flex-shrink-0 position-relative">
-                                        <img src="assets/images/notification/profile-5.png" alt="Image">
+                                        <img src="{{ asset('assets/backend/images/notification/profile-5.png') }}"
+                                            alt="Image">
                                         <span
                                             class="w-8-px h-8-px bg-success-main rounded-circle position-absolute end-0 bottom-0"></span>
                                     </span>
@@ -113,7 +116,8 @@
                                 <div
                                     class="text-black hover-bg-transparent hover-text-primary d-flex align-items-center gap-3">
                                     <span class="w-40-px h-40-px rounded-circle flex-shrink-0 position-relative">
-                                        <img src="assets/images/notification/profile-6.png" alt="Image">
+                                        <img src="{{ asset('assets/backend/images/notification/profile-6.png') }}"
+                                            alt="Image">
                                         <span
                                             class="w-8-px h-8-px bg-neutral-300 rounded-circle position-absolute end-0 bottom-0"></span>
                                     </span>
@@ -135,7 +139,8 @@
                                 <div
                                     class="text-black hover-bg-transparent hover-text-primary d-flex align-items-center gap-3">
                                     <span class="w-40-px h-40-px rounded-circle flex-shrink-0 position-relative">
-                                        <img src="assets/images/notification/profile-7.png" alt="Image">
+                                        <img src="{{ asset('assets/backend/images/notification/profile-7.png') }}"
+                                            alt="Image">
                                         <span
                                             class="w-8-px h-8-px bg-success-main rounded-circle position-absolute end-0 bottom-0"></span>
                                     </span>
@@ -202,7 +207,8 @@
                                     class="text-black hover-bg-transparent hover-text-primary d-flex align-items-center gap-3">
                                     <span
                                         class="w-44-px h-44-px bg-success-subtle text-success-main rounded-circle d-flex justify-content-center align-items-center flex-shrink-0">
-                                        <img src="assets/images/notification/profile-1.png" alt="Image">
+                                        <img src="{{ asset('assets/backend/images/notification/profile-1.png') }}"
+                                            alt="Image">
                                     </span>
                                     <div>
                                         <h6 class="text-md fw-semibold mb-4">Ronald Richards</h6>
@@ -236,7 +242,8 @@
                                     class="text-black hover-bg-transparent hover-text-primary d-flex align-items-center gap-3">
                                     <span
                                         class="w-44-px h-44-px bg-success-subtle text-success-main rounded-circle d-flex justify-content-center align-items-center flex-shrink-0">
-                                        <img src="assets/images/notification/profile-2.png" alt="Image">
+                                        <img src="{{ asset('assets/backend/images/notification/profile-2.png') }}"
+                                            alt="Image">
                                     </span>
                                     <div>
                                         <h6 class="text-md fw-semibold mb-4">Robiul Hasan</h6>

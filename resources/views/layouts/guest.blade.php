@@ -88,17 +88,17 @@
     <section class="auth bg-base d-flex flex-wrap">
         <div class="auth-left d-lg-block d-none">
             <div class="d-flex align-items-center flex-column h-100 justify-content-center">
-                <img src="{{ asset('assets/backend/images/auth/auth-img.png') }}" alt="Image">
+                <img src="{{ asset('assets/backend/logo_png.png') }}" alt="Image">
             </div>
         </div>
         <div class="auth-right py-32 px-24 d-flex flex-column justify-content-center">
             <div class="max-w-464-px mx-auto w-100">
                 <div>
-                    <a href="index.html" class="mb-40 max-w-290-px">
-                        <img src="{{ asset('assets/backend/images/logo.png') }}" alt="Image">
+                    <a href="{{ route('login') }}" class="mb-40 max-w-290-px" style="width: 168px;height: 40px;">
+                        <img src="{{ asset('assets/backend/logo_landscape.png') }}" alt="Image">
                     </a>
-                    <h4 class="mb-12">Masuk ke Akun Anda</h4>
-                    <p class="mb-32 text-secondary-light text-lg">Selamat Datang! silakan masukkan detail Anda
+                    <h4 class="mb-12">Selamat Datang</h4>
+                    <p class="mb-32 text-secondary-light text-lg">Silahkan masukkan akun anda
                     </p>
                 </div>
                 @yield('content')
