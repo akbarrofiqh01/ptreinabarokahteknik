@@ -62,25 +62,39 @@ class UserController extends Controller implements HasMiddleware
     public function store(Request $request)
     {
         $request->validate([
+            'username' => ['required', 'min:1'],
+            'nik' => ['required', 'min:1', 'digits:16', 'numeric'],
             'name' => ['required', 'min:3'],
             'email' => ['required', 'email', 'unique:users,email'],
-            'password' => ['required', 'min:5', 'same:confirm'],
-            'confirm' => ['required'],
+            'phone' => ['required', 'min:1', 'digits_between:1,12', 'numeric'],
+            'password' => ['required', 'min:5', 'same:password_confirmation'],
+            'password_confirmation' => ['required'],
         ], [
+            'username.required' => 'Bagian username wajib diisi !!!',
+            'username.min' => 'username minimal 1 karakter !!!',
+            'nik.required' => 'Bagian NIK wajib diisi !!!',
+            'nik.min' => 'NIK minimal 1 karakter !!!',
+            'nik.digits' => 'NIK maksimal 16 karakter !!!',
             'name.required' => 'Bagian nama wajib diisi !!!',
             'name.min' => 'Nama minimal 3 karakter.',
             'email.required' => 'Bagian email wajib diisi !!!',
             'email.email' => 'Format email tidak valid.',
             'email.unique' => 'Bagian email sudah ada sebelumnya.',
+            'phone.required' => 'Bagian no telp wajib diisi !!!',
+            'phone.min' => 'No telp minimal 1 karakter !!!',
+            'phone.digits_between' => 'No telp maksimal 12 karakter !!!',
             'password.required' => 'Bagian password wajib diisi !!!',
             'password.min' => 'Password minimal 5 karakter.',
             'password.same' => 'Password dan konfirmasi password harus sama.',
-            'confirm.required' => 'Bagian konfirmasi password wajib diisi !!!',
+            'password_confirmation.required' => 'Bagian konfirmasi password wajib diisi !!!',
         ]);
 
         $createUser = new User();
+        $createUser->username   = $request->username;
+        $createUser->nik   = $request->nik;
         $createUser->name   = $request->name;
         $createUser->email  = $request->email;
+        $createUser->phone  = $request->phone;
         $createUser->password  = Hash::make($request->password);
         $createUser->code_user = Str::random(60);
         $createUser->syncRoles($request->role);
@@ -126,19 +140,58 @@ class UserController extends Controller implements HasMiddleware
     public function update(Request $request, string $id)
     {
         $validated = $request->validate([
-            'name'                 => ['required', 'min:3'],
-            'email'                => ['required', 'email', 'unique:users,email,' . $id . ',code_user'],
+            'name'     => ['required', 'string', 'min:3', 'max:100'],
+            'email'    => ['required', 'email', 'unique:users,email,' . $id . ',code_user'],
+            'username' => ['nullable', 'string', 'min:3', 'max:50', 'unique:users,username,' . $id . ',code_user'],
+            'nik'      => ['nullable', 'string', 'digits:16', 'unique:users,nik,' . $id . ',code_user'],
+            'phone'    => ['nullable', 'string', 'min:10', 'max:13', 'regex:/^[0-9]+$/'],
+            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
         ], [
-            'name.required'        => 'Bagian nama wajib diisi !!!',
-            'email.required'        => 'Bagian email wajib diisi !!!',
-            'email.unique'          => 'Bagian email sudah ada sebelumnya'
+            'name.required'     => 'Bagian nama wajib diisi !!!',
+            'name.min'          => 'Nama minimal 3 karakter',
+            'name.max'          => 'Nama maksimal 100 karakter',
+            'email.required'    => 'Bagian email wajib diisi !!!',
+            'email.email'       => 'Format email tidak valid',
+            'email.unique'      => 'Email sudah digunakan',
+            'username.min'      => 'Username minimal 3 karakter',
+            'username.max'      => 'Username maksimal 50 karakter',
+            'username.unique'   => 'Username sudah digunakan',
+            'nik.digits'        => 'NIK harus 16 digit angka',
+            'nik.unique'        => 'NIK sudah terdaftar',
+            'phone.min'         => 'Nomor telepon minimal 10 digit',
+            'phone.max'         => 'Nomor telepon maksimal 13 digit',
+            'phone.regex'       => 'Nomor telepon hanya boleh berisi angka',
+            'password.min'      => 'Password minimal 8 karakter',
+            'password.confirmed' => 'Konfirmasi password tidak cocok',
         ]);
-        $users = User::where('code_user', $id)->firstOrFail();
-        $users->syncRoles($request->role);
-        $users->update($validated);
+
+        $user = User::where('code_user', $id)->firstOrFail();
+
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+        if (isset($validated['username'])) {
+            $user->username = $validated['username'];
+        }
+        if (isset($validated['nik'])) {
+            $user->nik = $validated['nik'];
+        }
+        if (isset($validated['phone'])) {
+            $user->phone = $validated['phone'];
+        }
+        if (!empty($validated['password'])) {
+            $user->password = Hash::make($validated['password']);
+        }
+        $user->save();
+
+        if ($request->has('role')) {
+            $user->syncRoles($request->role);
+        } else {
+            $user->syncRoles([]);
+        }
+
         return response()->json([
-            'message'           => 'User berhasil diubah!',
-            'csrf_token'        => csrf_token()
+            'message'    => 'Data user berhasil diperbarui!',
+            'csrf_token' => csrf_token()
         ]);
     }
 

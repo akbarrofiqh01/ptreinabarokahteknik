@@ -18,92 +18,129 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table id="example3" class="table table-bordered text-nowrap border-bottom align-middle">
-                    <thead>
+                <table id="usersTable" class="table table-bordered table-hover align-middle w-100">
+                    <thead class="table-light">
                         <tr>
                             <th width="5%">No</th>
                             <th>User</th>
                             <th>Email</th>
                             <th width="15%">Role</th>
-                            <th width="15%">Dibuat</th>
-                            <th width="20%">Aksi</th>
+                            <th>Dibuat</th>
+                            <th width="15%">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($datausers as $show)
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
+                                <td class="text-center">{{ $loop->iteration }}</td>
 
-                                <!-- User Info -->
                                 <td>
-                                    <div class="fw-semibold">{{ $show->fullname }}</div>
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0 me-2">
+                                            <div
+                                                class="avatar-sm bg-light rounded-circle d-flex align-items-center justify-content-center">
+                                                <span class="text-primary fw-bold">
+                                                    {{ substr($show->name, 0, 1) }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <div class="fw-semibold text-truncate" style="max-width: 150px;"
+                                                title="{{ $show->name }}">
+                                                {{ $show->name }}
+                                            </div>
+                                            @if (!empty($show->username))
+                                                <small class="text-muted text-truncate d-block" style="max-width: 150px;"
+                                                    title="{{ $show->username }}">
+                                                    @<span>{{ $show->username }}</span>
+                                                </small>
+                                            @endif
+                                        </div>
+                                    </div>
                                 </td>
 
-                                <td>{{ $show->email }}</td>
+                                <!-- Email -->
+                                <td>
+                                    <div class="text-truncate" style="max-width: 200px;" title="{{ $show->email }}">
+                                        {{ $show->email }}
+                                    </div>
+                                    @if (!empty($show->phone))
+                                        <small class="text-muted d-block">
+                                            <iconify-icon icon="solar:phone-calling-linear" class="me-1"></iconify-icon>
+                                            {{ $show->phone }}
+                                        </small>
+                                    @endif
+                                </td>
 
                                 <!-- Role -->
                                 <td>
-                                    @foreach ($show->roles as $role)
-                                        <span class="badge bg-primary">{{ ucfirst($role->name) }}</span>
-                                    @endforeach
+                                    <div class="d-flex flex-wrap gap-1">
+                                        @foreach ($show->roles as $role)
+                                            <span
+                                                class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25">
+                                                {{ ucfirst($role->name) }}
+                                            </span>
+                                        @endforeach
+                                        @if ($show->roles->isEmpty())
+                                            <span class="badge bg-secondary bg-opacity-10 text-secondary">No Role</span>
+                                        @endif
+                                    </div>
                                 </td>
 
                                 <!-- Created -->
                                 <td>
-                                    {{ \Carbon\Carbon::parse($show->created)->format('d M Y') }}
+                                    <div class="text-nowrap">
+                                        <iconify-icon icon="solar:calendar-outline" class="me-1"></iconify-icon>
+                                        {{ \Carbon\Carbon::parse($show->created)->format('d M Y') }}
+                                    </div>
+                                    <small class="text-muted">
+                                        {{ \Carbon\Carbon::parse($show->created)->format('H:i') }}
+                                    </small>
                                 </td>
 
                                 <!-- Action -->
                                 <td>
-                                    @can('edit users')
-                                        <!-- Edit Data User -->
-                                        <a data-href="{{ route('users.edit', ['usercode' => $show->code_user]) }}"
-                                            data-bs-title="Edit Users" data-bs-toggle="modal" data-bs-target="#dinamicModal"
-                                            data-bs-backdrop="static" data-bs-keyboard="false"
-                                            class="btn btn-sm btn-outline-primary mb-1">
-                                            <i class="fe fe-edit"></i>
-                                            Edit
-                                        </a>
+                                    <div class="d-flex flex-wrap gap-1">
+                                        @can('edit users')
+                                            <!-- Edit Data User -->
+                                            <button type="button"
+                                                data-href="{{ route('users.edit', ['usercode' => $show->code_user]) }}"
+                                                data-bs-title="Edit User" data-bs-toggle="modal" data-bs-target="#dinamicModal"
+                                                data-bs-backdrop="static" data-bs-keyboard="false"
+                                                class="w-32-px h-32-px bg-success-focus text-success-main rounded-circle d-inline-flex align-items-center justify-content-center">
+                                                <iconify-icon icon="tabler:edit" class="me-1"></iconify-icon>
+                                            </button>
 
-                                        <!-- Change Role -->
-                                        {{-- <a data-href="{{ route('users.role', ['usercode' => $show->code_user]) }}"
-                                            data-bs-title="Ubah Role" data-bs-toggle="modal" data-bs-target="#dinamicModal"
-                                            data-bs-backdrop="static" data-bs-keyboard="false"
-                                            class="btn btn-sm btn-outline-secondary mb-1">
-                                            <i class="fe fe-shield"></i>
-                                            Role
-                                        </a> --}}
-                                    @endcan
+                                            <!-- Reset Password (Opsional) -->
+                                            {{-- <button type="button"
+                                                data-href="{{ route('users.reset-password', ['usercode' => $show->code_user]) }}"
+                                                data-bs-title="Reset Password" data-bs-toggle="modal"
+                                                data-bs-target="#dinamicModal" data-bs-backdrop="static"
+                                                data-bs-keyboard="false"
+                                                class="btn btn-sm btn-outline-warning d-flex align-items-center">
+                                                <iconify-icon icon="solar:lock-password-outline" class="me-1"></iconify-icon>
+                                                Reset
+                                            </button> --}}
+                                        @endcan
 
-                                    @can('delete users')
-                                        <button class="btn btn-sm btn-outline-danger mb-1"
-                                            onclick="hapusConfirm('{{ $show->code_user }}')">
-                                            <i class="fe fe-trash-2"></i>
-                                            Hapus
-                                        </button>
-                                    @endcan
+                                        @can('delete users')
+                                            <button type="button" onclick="hapusConfirm('{{ $show->code_user }}')"
+                                                class="w-32-px h-32-px bg-danger-focus text-danger-main rounded-circle d-inline-flex align-items-center justify-content-center">
+                                                <iconify-icon icon="mingcute:delete-2-line" class="me-1"></iconify-icon>
+                                            </button>
+                                        @endcan
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
-
-                    <tfoot>
-                        <tr>
-                            <th>No</th>
-                            <th>User</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Dibuat</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </tfoot>
                 </table>
             </div>
         </div>
     </div>
     <script>
         $(document).ready(function() {
-            $('#example3').DataTable({
+            $('#usersTable').DataTable({
                 responsive: true
             });
         });

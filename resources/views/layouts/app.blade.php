@@ -95,7 +95,7 @@
                 <h6 class="fw-semibold mb-0">@yield('title-content')</h6>
                 <ul class="d-flex align-items-center gap-2">
                     <li class="fw-medium">
-                        <a href="index.html" class="d-flex align-items-center gap-1 hover-text-primary">
+                        <a href="javascript:void(0)" class="d-flex align-items-center gap-1 hover-text-primary">
                             <iconify-icon icon="solar:home-smile-angle-outline" class="icon text-lg"></iconify-icon>
                             @yield('title-content')
                         </a>

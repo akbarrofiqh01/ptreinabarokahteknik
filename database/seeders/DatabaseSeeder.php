@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             PermissionSeeder::class,
+            UserSeeder::class,
         ]);
         $superAdmin = User::create([
             'name' => 'Super Admin',

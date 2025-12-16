@@ -16,7 +16,7 @@
                     <div class="text-center border border-top-0 border-start-0 border-end-0">
                         <img id="profileAvatarTop" src="{{ $avatarUrl }}" alt="Image"
                             class="border br-white border-width-2-px w-200-px h-200-px rounded-circle object-fit-cover">
-                        <h6 class="mb-0 mt-16" id="displayHeadFullname">{{ Auth()->user()->fullname }}</h6>
+                        <h6 class="mb-0 mt-16" id="displayHeadFullname">{{ Auth()->user()->name }}</h6>
                         <span class="text-secondary-light mb-16" id="displayHeadEmail">{{ Auth()->user()->email }}</span>
                     </div>
                     <div class="mt-24" id="personalInfoSection">

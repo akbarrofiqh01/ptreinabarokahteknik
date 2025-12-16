@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
-use App\Http\Requests\Auth\LoginRequest;
+use Illuminate\Validation\ValidationException;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -20,33 +20,55 @@ class AuthenticatedSessionController extends Controller
         return view('auth.login');
     }
 
-    /**
-     * Handle an incoming authentication request.
-     */
-    public function store(LoginRequest $request): RedirectResponse|JsonResponse
+    public function store(Request $request): JsonResponse
     {
-        $request->authenticate();
+        $request->validate([
+            'login'     => ['required', 'string'],
+            'password'  => ['required', 'string'],
+        ]);
+
+        $login = $request->input('login');
+        $password = $request->input('password');
+
+        $field = filter_var($login, FILTER_VALIDATE_EMAIL)
+            ? 'email'
+            : 'username';
+
+        // Attempt login
+        if (! Auth::attempt([
+            $field => $login,
+            'password' => $password,
+        ], $request->boolean('remember'))) {
+
+            throw ValidationException::withMessages([
+                'login' => ['Email/Username atau password salah.'],
+            ]);
+        }
+
         $request->session()->regenerate();
+
         return response()->json([
-            'status'            => 'success',
-            'message'           => 'Selamat Datang kembali!',
-            'redirect'          => route('dashboard'),
-            'csrf_token'        => csrf_token()
+            'status'     => 'success',
+            'message'    => 'Selamat datang kembali!',
+            'redirect'   => route('dashboard'),
+            'csrf_token' => csrf_token(),
         ]);
     }
 
     /**
      * Destroy an authenticated session.
      */
-    public function destroy(Request $request): RedirectResponse|JsonResponse
+    public function destroy(Request $request): JsonResponse
     {
         Auth::guard('web')->logout();
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
         return response()->json([
-            'status'            => 'success',
-            'message'           => 'Logout berhasil, Silahkan login kembali!',
-            'redirect'          => route('login'),
+            'status'   => 'success',
+            'message'  => 'Logout berhasil, silakan login kembali.',
+            'redirect' => route('login'),
         ]);
     }
 }

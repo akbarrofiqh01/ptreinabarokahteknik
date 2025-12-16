@@ -32,7 +32,7 @@ class ProfileController extends Controller
         $user = $request->user();
         $data = $request->validated();
 
-        $user->fullname = $data['fullname'];
+        $user->name = $data['fullname'];
         $user->email = $data['email'];
         $user->user_phone = $data['usr_number'];
 

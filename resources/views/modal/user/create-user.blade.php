@@ -18,8 +18,27 @@
 </style>
 <form id="formNewUsers">
     <div class="row gy-3">
-        <!-- Nama Lengkap -->
         <div class="col-12">
+            <label class="form-label">Username</label>
+            <div class="icon-field">
+                <span class="icon">
+                    <iconify-icon icon="f7:person"></iconify-icon>
+                </span>
+                <input type="text" id="nik" name="username" class="form-control"
+                    placeholder="Masukkan username anda" autocomplete="off" />
+            </div>
+        </div>
+        <div class="col-12">
+            <label class="form-label">NIK <small>(Nomor Induk Kependudukan)</small></label>
+            <div class="icon-field">
+                <span class="icon">
+                    <iconify-icon icon="f7:person"></iconify-icon>
+                </span>
+                <input type="text" id="nik" name="nik" class="form-control"
+                    placeholder="Masukkan nik lengkap anda" autocomplete="off" />
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-6">
             <label class="form-label">Nama Lengkap</label>
             <div class="icon-field">
                 <span class="icon">
@@ -31,7 +50,7 @@
         </div>
 
         <!-- Email -->
-        <div class="col-12">
+        <div class="col-sm-12 col-md-6 col-lg-6">
             <label class="form-label">Email</label>
             <div class="icon-field">
                 <span class="icon">
@@ -42,7 +61,18 @@
             </div>
         </div>
 
-        <!-- Password -->
+        <!-- No Telp -->
+        <div class="col-12">
+            <label class="form-label">No Telp</label>
+            <div class="icon-field">
+                <span class="icon">
+                    <iconify-icon icon="solar:phone-calling-linear"></iconify-icon>
+                </span>
+                <input type="tel" id="valPhone" name="phone" class="form-control"
+                    placeholder="Masukkan nomor telpon anda" autocomplete="off" />
+            </div>
+        </div>
+
         <div class="col-12">
             <label class="form-label">Password</label>
             <div class="icon-field password-field">
@@ -111,26 +141,16 @@
     document.getElementById('formNewUsers').addEventListener('submit', function(e) {
         e.preventDefault();
 
-        const valName = document.getElementById('valName').value;
-        const valEmail = document.getElementById('valEmail').value;
-        const valPassword = document.getElementById('valPassword').value;
-        const valConfirmPwd = document.getElementById('valConfirmPwd').value;
-        const role = Array.from(document.querySelectorAll('input[name="role[]"]:checked'))
-            .map(checkbox => checkbox.value) || [];
+        const formData = new FormData(this);
         const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
         document.getElementById('SubmitsBtn').classList.add('d-none');
         document.getElementById('loadingSpinners').classList.remove('d-none');
 
-        axios.put('{{ route('users.store') }}', {
-                name: valName,
-                email: valEmail,
-                password: valPassword,
-                confirm: valConfirmPwd,
-                role: role,
-            }, {
+        axios.post('{{ route('users.store') }}', formData, {
                 headers: {
-                    'X-CSRF-TOKEN': token
+                    'X-CSRF-TOKEN': token,
+                    'Content-Type': 'multipart/form-data'
                 }
             })
             .then(function(response) {
@@ -147,6 +167,7 @@
             .catch(function(error) {
                 let errorMessages = '';
 
+                // Update CSRF token jika expired
                 if (error.response && error.response.data && error.response.data.csrf_token) {
                     axios.defaults.headers.common['X-CSRF-TOKEN'] = error.response.data.csrf_token;
                     const meta = document.querySelector('meta[name="csrf-token"]');
@@ -155,6 +176,7 @@
                     }
                 }
 
+                // Menangani error validasi
                 if (error.response && error.response.status === 422 && error.response.data.errors) {
                     Object.values(error.response.data.errors).forEach(function(messages) {
                         messages.forEach(function(message) {

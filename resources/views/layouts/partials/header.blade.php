@@ -290,7 +290,7 @@
                             <div
                                 class="py-12 px-16 radius-8 bg-primary-50 mb-16 d-flex align-items-center justify-content-between gap-2">
                                 <div>
-                                    <h6 class="text-lg text-primary-light fw-semibold mb-2">{{ Auth()->user()->fullname }}
+                                    <h6 class="text-lg text-primary-light fw-semibold mb-2">{{ Auth()->user()->name }}
                                     </h6>
                                     <span
                                         class="text-secondary-light fw-medium text-sm">({{ Auth()->user()->roles->pluck('name')->implode(', ') }})</span>

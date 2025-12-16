@@ -1,13 +1,14 @@
 @extends('layouts.guest')
-@section('title', 'Login - Laravel Spatie')
+@section('title', 'Login - PT Reina Barokah Teknik')
 @section('content')
     <form id="loginForm">
         @csrf
         <div class="icon-field mb-16">
             <span class="icon top-50 translate-middle-y">
-                <iconify-icon icon="mage:email"></iconify-icon>
+                <iconify-icon icon="f7:person"></iconify-icon>
             </span>
-            <input type="email" id="auth_email" class="form-control h-56-px bg-neutral-50 radius-12" placeholder="Email">
+            <input type="text" id="auth_email" class="form-control h-56-px bg-neutral-50 radius-12"
+                placeholder="Email / Username">
         </div>
 
         <div class="position-relative mb-20">
@@ -37,19 +38,22 @@
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            const email = document.getElementById('auth_email').value;
+            const login = document.getElementById('auth_email').value;
             const password = document.getElementById('auth_password').value;
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            // === FormData ===
+            const formData = new FormData();
+            formData.append('login', login); // email / username
+            formData.append('password', password);
 
             document.getElementById('loginBtn').classList.add('d-none');
             document.getElementById('loadingSpinner').classList.remove('d-none');
 
-            axios.post('{{ route('doLogin') }}', {
-                    email: email,
-                    password: password,
-                }, {
+            axios.post('{{ route('doLogin') }}', formData, {
                     headers: {
-                        'X-CSRF-TOKEN': token
+                        'X-CSRF-TOKEN': token,
+                        'Content-Type': 'multipart/form-data'
                     }
                 })
                 .then(function(response) {
@@ -66,6 +70,7 @@
                 .catch(function(error) {
                     let errorMessages = '';
 
+                    // refresh CSRF jika expired
                     if (error.response && error.response.data && error.response.data.csrf_token) {
                         axios.defaults.headers.common['X-CSRF-TOKEN'] = error.response.data.csrf_token;
                         const meta = document.querySelector('meta[name="csrf-token"]');
@@ -94,7 +99,6 @@
                     document.getElementById('loadingSpinner').classList.add('d-none');
                 });
         });
-
 
         document.addEventListener("DOMContentLoaded", function() {
             const toggleBtn = document.querySelector(".toggle-password");

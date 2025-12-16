@@ -2,13 +2,42 @@
 @section('title', 'Roles - PT Reina Barokah Teknik')
 @section('title-content', 'Roles')
 @section('content')
+    <style>
+        .permissions-cell {
+            max-width: 350px;
+            white-space: normal;
+            word-break: break-word;
+        }
+
+        .permissions-wrapper {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 12px 16px;
+            max-height: 260px;
+            overflow-y: auto;
+            background-color: #fafafa;
+        }
+
+        /* Scrollbar rapi */
+        .permissions-wrapper::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .permissions-wrapper::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        .permissions-wrapper::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+    </style>
     <div class="row gy-4">
         <div class="col-sm-12 col-md-4 col-lg-4">
             <div class="card h-100 p-0">
                 <div class="card-header border-bottom bg-base py-16 px-24">
                     <h6 class="text-lg fw-semibold mb-0">New Roles</h6>
                 </div>
-
                 <div class="card-body p-24">
                     <form id="formNewRoles">
 
@@ -21,29 +50,27 @@
                             </div>
                             @if ($dataPermission->isNotEmpty())
                                 <div class="col-12 mt-2">
-                                    <label
-                                        class="form-label fw-semibold text-primary-light text-sm mb-8">Permissions</label>
+                                    <label class="form-label fw-semibold text-primary-light text-sm mb-8">
+                                        Permissions
+                                    </label>
+                                    <div class="permissions-wrapper">
+                                        <div class="d-flex flex-column gap-12">
 
-                                    <div class="d-flex align-items-center flex-wrap gap-28">
+                                            @foreach ($dataPermission as $permissions)
+                                                <div class="form-check checked-primary d-flex align-items-center gap-2">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        id="permission_{{ $permissions->code_permissions }}"
+                                                        name="permissions[]" value="{{ $permissions->name }}">
 
-                                        @foreach ($dataPermission as $permissions)
-                                            <div class="form-check checked-primary d-flex align-items-center gap-2">
+                                                    <label class="form-check-label fw-medium text-secondary-light text-sm"
+                                                        for="permission_{{ $permissions->code_permissions }}">
+                                                        {{ $permissions->name }}
+                                                    </label>
+                                                </div>
+                                            @endforeach
 
-                                                <input class="form-check-input" type="checkbox"
-                                                    id="permission_{{ $permissions->code_permissions }}"
-                                                    name="permissions[]" value="{{ $permissions->name }}">
-
-                                                <label
-                                                    class="form-check-label line-height-1 fw-medium text-secondary-light text-sm"
-                                                    for="permission_{{ $permissions->code_permissions }}">
-                                                    {{ $permissions->name }}
-                                                </label>
-
-                                            </div>
-                                        @endforeach
-
+                                        </div>
                                     </div>
-
                                 </div>
                             @endif
 
@@ -77,7 +104,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="examples3" class="table table-bordered text-nowrap border-bottom">
+                        <table id="examples3" class="table table-bordered border-bottom w-100">
                             <thead>
                                 <tr>
                                     <th class="border-bottom-0" width="5%">No</th>
@@ -92,7 +119,8 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ ucfirst($rowRoles->name) }}</td>
-                                        <td>{{ $rowRoles->permissions->pluck('name')->implode(',') }}</td>
+                                        <td class="permissions-cell">
+                                            {{ $rowRoles->permissions->pluck('name')->implode(',') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($rowRoles->created)->format('d M, Y') }}</td>
                                         <td>
                                             @can('edit roles')
@@ -133,7 +161,16 @@
     <script>
         $(document).ready(function() {
             $('#examples3').DataTable({
-                responsive: true
+                responsive: true,
+                autoWidth: false,
+                scrollX: true,
+                dom: "<'row mb-3'<'col-md-6'l><'col-md-6 text-end'f>>" +
+                    "<'row'<'col-12'tr>>" +
+                    "<'row mt-3'<'col-md-5'i><'col-md-7'p>>",
+                columnDefs: [{
+                    targets: 2,
+                    className: 'permissions-cell'
+                }]
             });
         });
         document.getElementById('formNewRoles').addEventListener('submit', function(e) {

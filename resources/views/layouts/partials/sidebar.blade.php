@@ -120,7 +120,7 @@
         <iconify-icon icon="radix-icons:cross-2"></iconify-icon>
     </button>
     <div>
-        <a href="index.html" class="sidebar-logo">
+        <a href="{{ route('dashboard') }}" class="sidebar-logo">
             <img src="{{ asset('assets/backend/logo_landscape.png') }}" alt="site logo" class="light-logo">
             <img src="{{ asset('assets/backend/logo_landscape_white.png') }}" alt="site logo" class="dark-logo">
             <img src="{{ asset('assets/backend/logosaja.png') }}" alt="site logo" class="logo-icon">
@@ -134,7 +134,7 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-            <li class="sidebar-menu-group-title">Users & Hak Akses</li>
+            <li class="sidebar-menu-group-title">Users</li>
             <li class="dropdown">
                 <a href="javascript:void(0)">
                     <iconify-icon icon="flowbite:users-group-outline" class="menu-icon"></iconify-icon>
@@ -145,11 +145,6 @@
                         <a href="{{ route('users.list') }}"><i
                                 class="ri-circle-fill circle-icon {{ Arr::random($colors) }} w-auto"></i>
                             Users</a>
-                    </li>
-                    <li>
-                        <a href="users-role-permission.html"><i
-                                class="ri-circle-fill circle-icon {{ Arr::random($colors) }} w-auto"></i>
-                            User Role & Permission</a>
                     </li>
                 </ul>
             </li>
