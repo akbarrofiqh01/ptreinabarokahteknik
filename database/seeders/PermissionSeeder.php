@@ -10,12 +10,37 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class PermissionSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+
     public function run(): void
     {
         $permissions = [
+            // TRANSACTION
+            'transaction.create',
+            'transaction.view',
+            'transaction.update',
+            'transaction.submit',
+            'transaction.approve',
+            'transaction.reject',
+
+            // TRANSACTION ITEM
+            'transaction-item.add',
+            'transaction-item.update',
+            'transaction-item.delete',
+            'transaction-item.import-excel',
+            'transaction-item.check-ready',
+
+            // PAYMENT
+            'payment.upload',
+            'payment.view',
+            'payment.verify',
+            'payment.reject',
+
+            // LEDGER / REPORT
+            'ledger.view',
+
+            // LOG
+            'transaction-log.view',
+
             'view dashboard',
             'view roles',
             'create roles',
@@ -31,34 +56,38 @@ class PermissionSeeder extends Seeder
             Permission::firstOrCreate(['name' => $permission, 'guard_name' => 'web', 'code_permissions' => Str::random(60)]);
         }
 
-        // $roleAdmin = Role::create(['name' => 'admin', 'guard_name' => 'web', 'code_role'    => Str::random(60)]);
-        // $roleAdmin->givePermissionTo(Permission::all());
+        $adminRole = Role::firstOrCreate(['name' => 'admin', 'code_role' => Str::random(60)]);
+        $userRole  = Role::firstOrCreate(['name' => 'user', 'code_role' => Str::random(60)]);
 
-        // $roleDosen = Role::create(['name' => 'dosen', 'guard_name' => 'web', 'code_role'    => Str::random(60)]);
-        // $roleDosen->givePermissionTo([
-        //     'view dashboard',
-        //     'input nilai',
-        //     'view laporan'
-        // ]);
+        $userRole->syncPermissions([
+            'transaction.create',
+            'transaction.view',
+            'transaction.update',
+            'transaction.submit',
 
-        // $roleMahasiswa = Role::create(['name' => 'mahasiswa', 'guard_name' => 'web', 'code_role'    => Str::random(60)]);
-        // $roleMahasiswa->givePermissionTo([
-        //     'view dashboard',
-        //     'buat krs'
-        // ]);
+            'transaction-item.add',
+            'transaction-item.update',
+            'transaction-item.delete',
+            'transaction-item.import-excel',
 
-        // $roleKaprodi = Role::create(['name' => 'kaprodi', 'guard_name' => 'web', 'code_role'    => Str::random(60)]);
-        // $roleKaprodi->givePermissionTo([
-        //     'view dashboard',
-        //     'approve krs',
-        //     'view laporan'
-        // ]);
+            'payment.upload',
+            'payment.view',
+        ]);
 
-        // $roleTendik = Role::create(['name' => 'tendik', 'guard_name' => 'web', 'code_role'    => Str::random(60)]);
-        // $roleTendik->givePermissionTo([
-        //     'view dashboard',
-        //     'manage pengumuman'
-        // ]);
+        $adminRole->syncPermissions([
+            'transaction.view',
+            'transaction.approve',
+            'transaction.reject',
+
+            'transaction-item.check-ready',
+
+            'payment.view',
+            'payment.verify',
+            'payment.reject',
+
+            'ledger.view',
+            'transaction-log.view',
+        ]);
 
         $superAdmin = Role::firstOrCreate(['name' => 'superadmin', 'guard_name' => 'web', 'code_role'    => Str::random(60)]);
         $superAdmin->syncPermissions(Permission::all());

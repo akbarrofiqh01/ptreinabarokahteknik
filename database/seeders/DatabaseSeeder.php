@@ -22,10 +22,9 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
         ]);
         $superAdmin = User::create([
-            'fullname' => 'Super Admin',
+            'name' => 'Super Admin',
             'username' => 'superadmin',
-            'user_type' => 'superadmin',
-            'user_phone' => '+6287752729835',
+            'phone' => '+6287752729835',
             'email' => 'superadmin@admin.com',
             'password' => Hash::make('password'),
             'code_user' => Str::random(60),

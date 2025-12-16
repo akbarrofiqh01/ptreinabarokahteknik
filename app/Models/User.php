@@ -3,11 +3,11 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Models\Dosen;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+
 
 class User extends Authenticatable
 {
@@ -42,14 +42,13 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function student()
+    public function transactions()
     {
-        return $this->hasOne(Student::class);
+        return $this->hasMany(Transaction::class);
     }
 
-    public function lecturer()
+    public function transactionLogs()
     {
-        return $this->hasOne(Lecturers::class);
+        return $this->hasMany(Transaction_log::class, 'actor_id');
     }
-    
 }
