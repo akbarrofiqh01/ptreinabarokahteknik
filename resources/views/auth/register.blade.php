@@ -300,8 +300,8 @@
                     <span class="bg-base z-1 px-4"></span>
                 </div>
                 <div class="mt-32 text-center text-sm">
-                    <p class="mb-0">Belum Punya Akun ? <a href="{{ route('register') }}"
-                            class="text-primary-600 fw-semibold">Registrasi</a></p>
+                    <p class="mb-0">Sudah Punya Akun ? <a href="{{ route('login') }}"
+                            class="text-primary-600 fw-semibold">Login</a></p>
                 </div>
             </div>
         </div>

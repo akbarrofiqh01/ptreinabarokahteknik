@@ -24,7 +24,7 @@
                             <iconify-icon icon="f7:person"></iconify-icon>
                         </span>
                         <input type="text" id="auth_email" class="form-control h-56-px bg-neutral-50 radius-12"
-                            placeholder="Email / Username">
+                            placeholder="Email / Username" autocomplete="off">
                     </div>
 
                     <div class="position-relative mb-20">

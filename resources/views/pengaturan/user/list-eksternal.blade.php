@@ -13,6 +13,7 @@
                     <thead class="table-light">
                         <tr>
                             <th width="5%">No</th>
+                            <th>Perusahaan</th>
                             <th>User</th>
                             <th>Email</th>
                             <th>Role</th>
@@ -25,7 +26,7 @@
                         @foreach ($dataUsers as $show)
                             <tr>
                                 <td class="text-center">{{ $loop->iteration }}</td>
-
+                                <td>{{ $show->company->name }}</td>
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <div class="flex-shrink-0 me-2">
@@ -47,8 +48,6 @@
                                                     @<span>{{ $show->username }}</span>
                                                 </small>
                                             @endif
-                                            <small class="text-muted text-truncate d-block"
-                                                style="max-width: 150px;"><span>{{ $show->company->name }}</span></small>
                                         </div>
                                     </div>
                                 </td>
@@ -81,29 +80,32 @@
                                     </div>
                                 </td>
                                 <td>
-                                    @if ($show->status === 'pending')
-                                        <span class="badge bg-warning bg-opacity-10 text-warning">
-                                            Pending
-                                        </span>
-                                    @elseif ($show->status === 'active')
-                                        <span class="badge bg-success bg-opacity-10 text-success">
-                                            Active
-                                        </span>
-                                    @elseif ($show->status === 'suspended')
-                                        <span class="badge bg-danger bg-opacity-10 text-danger">
-                                            Suspended
-                                        </span>
-                                    @endif
+                                    <div class="d-flex flex-wrap gap-1">
+
+                                        @if ($show->status === 'pending')
+                                            <span
+                                                class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25">
+                                                Pending
+                                            </span>
+                                        @elseif ($show->status === 'active')
+                                            <span
+                                                class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">
+                                                Active
+                                            </span>
+                                        @elseif ($show->status === 'suspended')
+                                            <span
+                                                class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25">
+                                                Suspended
+                                            </span>
+                                        @endif
+                                    </div>
                                 </td>
-                                <!-- Created -->
                                 <td>
                                     <div class="text-nowrap">
                                         <iconify-icon icon="solar:calendar-outline" class="me-1"></iconify-icon>
                                         {{ \Carbon\Carbon::parse($show->created)->format('d M Y') }}
                                     </div>
-                                    <small class="text-muted">
-                                        {{ \Carbon\Carbon::parse($show->created)->format('H:i') }}
-                                    </small>
+
                                 </td>
 
                                 <!-- Action -->
@@ -112,9 +114,14 @@
                                         @can('edit users')
                                             @if ($show->status === 'pending')
                                                 <button type="button" onclick="approveUser('{{ $show->code_user }}')"
-                                                    class="w-32-px h-32-px bg-success-focus text-primary-main rounded-circle d-inline-flex align-items-center justify-content-center"
+                                                    class="w-32-px h-32-px bg-success-focus text-success-main rounded-circle d-inline-flex align-items-center justify-content-center"
                                                     title="Approve User">
                                                     <iconify-icon icon="solar:check-circle-outline"></iconify-icon>
+                                                </button>
+                                                <button type="button" onclick="suspendUser('{{ $show->code_user }}')"
+                                                    class="w-32-px h-32-px bg-danger-focus text-danger-main rounded-circle d-inline-flex align-items-center justify-content-center"
+                                                    title="Tolak User">
+                                                    <iconify-icon icon="solar:user-block-outline"></iconify-icon>
                                                 </button>
                                             @else
                                                 @role('superadmin')
@@ -124,13 +131,22 @@
                                                             data-bs-title="Promote User to Internal" data-bs-toggle="modal"
                                                             data-bs-target="#dinamicModal" data-bs-backdrop="static"
                                                             data-bs-keyboard="false"
-                                                            class="w-32-px h-32-px bg-info-focus text-info-main rounded-circle d-inline-flex align-items-center justify-content-center"
+                                                            class="w-32-px h-32-px bg-success-focus text-success-main rounded-circle d-inline-flex align-items-center justify-content-center"
                                                             title="Promote to Internal">
                                                             <iconify-icon icon="solar:user-plus-outline"></iconify-icon>
                                                         </button>
                                                     @endif
                                                 @endrole
                                             @endif
+                                            <button type="button"
+                                                data-href="{{ route('usersEksternal.detil', ['usercode' => $show->code_user]) }}"
+                                                data-bs-title="Detil User Eksternal" data-bs-toggle="modal"
+                                                data-bs-target="#dinamicModal" data-bs-backdrop="static"
+                                                data-bs-keyboard="false"
+                                                class="w-32-px h-32-px bg-success-focus text-success-main rounded-circle d-inline-flex align-items-center justify-content-center"
+                                                title="Detil User Eksternal">
+                                                <iconify-icon icon="solar:eye-outline" class="me-1"></iconify-icon>
+                                            </button>
                                             <button type="button"
                                                 data-href="{{ route('usersEksternal.edit', ['usercode' => $show->code_user]) }}"
                                                 data-bs-title="Edit User Eksternal" data-bs-toggle="modal"
@@ -206,6 +222,47 @@
             });
         }
 
+        function suspendUser(userCode) {
+            Swal.fire({
+                title: 'Apakah Anda Yakin ?',
+                text: 'User ini akan disuspend dan tidak dapat login.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, Suspend',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                    axios.post(`/users/users-eksternal-suspend/${userCode}`, {}, {
+                            headers: {
+                                'X-CSRF-TOKEN': token
+                            }
+                        })
+                        .then(function(response) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil',
+                                text: response.data.message,
+                                timer: 1500,
+                                showConfirmButton: false
+                            }).then(() => {
+                                window.location.reload();
+                            });
+                        })
+                        .catch(function(error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal',
+                                text: error.response?.data?.message ?? 'Terjadi kesalahan.'
+                            });
+                        });
+                }
+            });
+        }
+
         function hapusConfirm(userId) {
             Swal.fire({
                 title: 'Apakah anda yakin?',
@@ -220,7 +277,7 @@
                 if (result.isConfirmed) {
                     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-                    axios.delete(`/users/deleteUser/${userId}`, {
+                    axios.delete(`/users/users-eksternal-delete/${userId}`, {
                             id: userId,
                         }, {
                             headers: {

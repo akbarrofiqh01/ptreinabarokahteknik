@@ -18,7 +18,7 @@
                                     placeholder="Entry name permissions" autocomplete="off">
                             </div>
 
-                            @can('create permissions')
+                            @can('permissions.create')
                                 <div class="col-12">
                                     <button type="submit" id="SubmitBtn" class="btn btn-primary-600 w-100">
                                         Tambah Data
@@ -62,7 +62,7 @@
                                         <td>{{ $show->name }}</td>
                                         <td>{{ \Carbon\Carbon::parse($show->created)->format('d M, Y') }}</td>
                                         <td>
-                                            @can('edit permissions')
+                                            @can('permissions.edit')
                                                 <a data-href="{{ route('permissions.edit', ['permissionscode' => $show->code_permissions]) }}"
                                                     data-bs-title="Edit Permissions" data-bs-remote="false"
                                                     data-bs-toggle="modal" data-bs-target="#dinamicModal"
@@ -71,7 +71,7 @@
                                                     <iconify-icon icon="lucide:edit"></iconify-icon>
                                                 </a>
                                             @endcan
-                                            @can('delete permissions')
+                                            @can('permissions.delete')
                                                 <a href="javascript:void(0)"
                                                     class="w-32-px h-32-px bg-danger-focus text-danger-main rounded-circle d-inline-flex align-items-center justify-content-center"
                                                     onclick="hapusConfirm('{{ $show->code_permissions }}')"

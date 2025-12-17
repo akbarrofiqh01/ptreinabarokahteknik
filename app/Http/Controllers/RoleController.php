@@ -15,10 +15,10 @@ class RoleController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('permission:view roles', only: ['index']),
-            new Middleware('permission:create roles', only: ['store']),
-            new Middleware('permission:edit roles', only: ['edit']),
-            new Middleware('permission:delete roles', only: ['destroy']),
+            new Middleware('permission:roles.view', only: ['index']),
+            new Middleware('permission:roles.create', only: ['store']),
+            new Middleware('permission:roles.edit', only: ['edit']),
+            new Middleware('permission:roles.delete', only: ['destroy']),
         ];
     }
     public function index()
@@ -67,32 +67,33 @@ class RoleController extends Controller implements HasMiddleware
     }
     public function update(Request $request, $roleCode)
     {
+        $role = Role::where('code_role', $roleCode)->firstOrFail();
+
         $request->validate([
-            'name'                 => ['required', 'unique:roles,name,' . $roleCode . ',code_role', 'min:3'],
+            'name' => [
+                'required',
+                'min:3',
+                'unique:roles,name,' . $role->id,
+            ],
         ], [
-            'name.required'        => 'Bagian nama roles wajib diisi !!!',
-            'name.unique'        => 'Bagian nama roles harus unique !!!',
+            'name.required' => 'Bagian nama roles wajib diisi !!!',
+            'name.unique'   => 'Bagian nama roles harus unique !!!',
         ]);
-        $getRoles = Role::where('code_role', $roleCode)->firstOrFail();
-        $isUsed  = User::role($getRoles->name)->exists();
-        if ($isUsed) {
-            return response()->json([
-                'message' => 'Role ini sudah digunakan oleh user dan tidak bisa diubah.',
-                'csrf_token'        => csrf_token()
-            ], 422);
-        }
-        $getRoles->name = strtolower($request->name);
-        if (!empty($request->selectedPermissions)) {
-            $getRoles->syncPermissions($request->selectedPermissions);
-        } else {
-            $getRoles->syncPermissions([]);
-        }
-        $getRoles->update();
+
+        // Update nama role
+        $role->name = strtolower($request->name);
+        $role->save();
+
+        // Sync permissions (boleh walaupun role dipakai user)
+        $permissions = $request->selectedPermissions ?? [];
+        $role->syncPermissions($permissions);
+
         return response()->json([
-            'message'           => 'Roles berhasil diubah!',
-            'csrf_token'        => csrf_token()
+            'message' => 'Roles berhasil diubah!',
+            'csrf_token' => csrf_token()
         ]);
     }
+
     public function destroy($roleCode)
     {
         $getRoles = Role::where('code_role', $roleCode)->firstOrFail();

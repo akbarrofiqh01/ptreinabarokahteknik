@@ -1,135 +1,120 @@
 @extends('layouts.app')
-@section('title', 'Users Internal - PT Reina Barokah Teknik')
-@section('title-content', 'Users Internal')
+@section('title', 'List Bank - PT Reina Barokah Teknik')
+@section('title-content', 'List Bank')
 @section('content')
     <div class="card h-100 p-0 radius-12">
         <div
             class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
-            <h5 class="card-title">Data Users</h5>
-
-            @can('users.create')
-                <a data-href="{{ route('users.create') }}" data-bs-title="Tambah Users" data-bs-remote="false"
-                    data-bs-toggle="modal" data-bs-target="#dinamicModal" data-bs-backdrop="static" data-bs-keyboard="false"
+            <h5 class="card-title">List Bank</h5>
+            @can('bank.create')
+                <a data-href="{{ route('bank.create') }}" data-bs-title="Tambah Bank" data-bs-remote="false" data-bs-toggle="modal"
+                    data-bs-target="#dinamicModal" data-bs-backdrop="static" data-bs-keyboard="false"
                     class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 d-flex align-items-center gap-2">
-                    <iconify-icon icon="ic:baseline-plus" class="icon text-xl line-height-1"></iconify-icon> Users
+                    <iconify-icon icon="ic:baseline-plus" class="icon text-xl line-height-1"></iconify-icon> Bank
                 </a>
             @endcan
-
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table id="usersTable" class="table table-bordered table-hover align-middle w-100">
+                <table id="bnkTable" class="table table-bordered table-hover align-middle w-100">
                     <thead class="table-light">
                         <tr>
                             <th width="5%">No</th>
-                            <th>User</th>
-                            <th>Email</th>
-                            <th width="15%">Role</th>
+                            <th>Bank</th>
+                            <th>Rekening</th>
+                            <th width="12%">Kode Bank</th>
                             <th>Dibuat</th>
                             <th width="15%">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($datausers as $show)
+                        @foreach ($dataBank as $show)
                             <tr>
+                                <!-- No -->
                                 <td class="text-center">{{ $loop->iteration }}</td>
 
+                                <!-- Bank -->
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <div class="flex-shrink-0 me-2">
                                             <div
                                                 class="avatar-sm bg-light rounded-circle d-flex align-items-center justify-content-center">
                                                 <span class="text-primary fw-bold">
-                                                    {{ substr($show->name, 0, 1) }}
+                                                    {{ strtoupper(substr($show->account_bank, 0, 1)) }}
                                                 </span>
                                             </div>
                                         </div>
                                         <div class="flex-grow-1">
-                                            <div class="fw-semibold text-truncate" style="max-width: 150px;"
-                                                title="{{ $show->name }}">
-                                                {{ $show->name }}
+                                            <div class="fw-semibold text-truncate" style="max-width: 180px;"
+                                                title="{{ $show->account_bank }}">
+                                                {{ $show->account_bank }}
                                             </div>
-                                            @if (!empty($show->username))
-                                                <small class="text-muted text-truncate d-block" style="max-width: 150px;"
-                                                    title="{{ $show->username }}">
-                                                    @<span>{{ $show->username }}</span>
-                                                </small>
-                                            @endif
                                         </div>
                                     </div>
                                 </td>
 
-                                <!-- Email -->
+                                <!-- Rekening -->
                                 <td>
-                                    <div class="text-truncate" style="max-width: 200px;" title="{{ $show->email }}">
-                                        {{ $show->email }}
+                                    <div class="fw-semibold text-truncate" style="max-width: 200px;"
+                                        title="{{ $show->account_name }}">
+                                        {{ $show->account_name }}
                                     </div>
-                                    @if (!empty($show->phone))
-                                        <small class="text-muted d-block">
-                                            <iconify-icon icon="solar:phone-calling-linear" class="me-1"></iconify-icon>
-                                            {{ $show->phone }}
-                                        </small>
-                                    @endif
-                                </td>
-
-                                <!-- Role -->
-                                <td>
-                                    <div class="d-flex flex-wrap gap-1">
-                                        @foreach ($show->roles as $role)
-                                            <span
-                                                class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25">
-                                                {{ ucfirst($role->name) }}
-                                            </span>
-                                        @endforeach
-                                        @if ($show->roles->isEmpty())
-                                            <span class="badge bg-secondary bg-opacity-10 text-secondary">No Role</span>
-                                        @endif
-                                    </div>
-                                </td>
-
-                                <!-- Created -->
-                                <td>
-                                    <div class="text-nowrap">
-                                        <iconify-icon icon="solar:calendar-outline" class="me-1"></iconify-icon>
-                                        {{ \Carbon\Carbon::parse($show->created)->format('d M Y') }}
-                                    </div>
-                                    <small class="text-muted">
-                                        {{ \Carbon\Carbon::parse($show->created)->format('H:i') }}
+                                    <small class="text-muted d-block text-truncate" style="max-width: 200px;"
+                                        title="{{ $show->account_number }}">
+                                        {{ $show->account_number }}
                                     </small>
                                 </td>
 
-                                <!-- Action -->
+                                <!-- Kode Bank -->
+                                <td class="text-center">
+                                    <span
+                                        class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25">
+                                        {{ $show->account_bank_code }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <div class="text-nowrap">
+                                        <iconify-icon icon="solar:calendar-outline" class="me-1"></iconify-icon>
+                                        {{ $show->created_at->format('d M Y') }}
+                                    </div>
+                                    <small class="text-muted">
+                                        {{ $show->created_at->format('H:i') }}
+                                    </small>
+                                </td>
+
                                 <td>
                                     <div class="d-flex flex-wrap gap-1">
-                                        @can('users.edit')
-                                            <!-- Edit Data User -->
-                                            <button type="button"
-                                                data-href="{{ route('users.edit', ['usercode' => $show->code_user]) }}"
-                                                data-bs-title="Edit User" data-bs-toggle="modal" data-bs-target="#dinamicModal"
+
+                                        @can('bank.edit')
+                                            <button type="button" data-href="{{ route('bank.edit', $show->code_bank) }}"
+                                                data-bs-title="Edit Bank" data-bs-toggle="modal" data-bs-target="#dinamicModal"
                                                 data-bs-backdrop="static" data-bs-keyboard="false"
                                                 class="w-32-px h-32-px bg-success-focus text-success-main rounded-circle d-inline-flex align-items-center justify-content-center">
-                                                <iconify-icon icon="tabler:edit" class="me-1"></iconify-icon>
+                                                <iconify-icon icon="tabler:edit"></iconify-icon>
                                             </button>
                                         @endcan
 
-                                        @can('users.delete')
-                                            <button type="button" onclick="hapusConfirm('{{ $show->code_user }}')"
+                                        @can('bank.delete')
+                                            <button type="button" onclick="hapusConfirm('{{ $show->code_bank }}')"
                                                 class="w-32-px h-32-px bg-danger-focus text-danger-main rounded-circle d-inline-flex align-items-center justify-content-center">
-                                                <iconify-icon icon="mingcute:delete-2-line" class="me-1"></iconify-icon>
+                                                <iconify-icon icon="mingcute:delete-2-line"></iconify-icon>
                                             </button>
                                         @endcan
+
                                     </div>
                                 </td>
                             </tr>
                         @endforeach
                     </tbody>
+
                 </table>
             </div>
         </div>
     </div>
     <script>
         $(document).ready(function() {
-            $('#usersTable').DataTable({
+            $('#bnkTable').DataTable({
                 responsive: true
             });
         });
@@ -137,7 +122,7 @@
         function hapusConfirm(userId) {
             Swal.fire({
                 title: 'Apakah anda yakin?',
-                text: 'Ingin menghapus user ini !',
+                text: 'Ingin menghapus data bank ini !',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
@@ -148,7 +133,7 @@
                 if (result.isConfirmed) {
                     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-                    axios.delete(`/users/deleteUserInternal/${userId}`, {
+                    axios.delete(`/data-master/data-bank/Deletebank/${userId}`, {
                             id: userId,
                         }, {
                             headers: {

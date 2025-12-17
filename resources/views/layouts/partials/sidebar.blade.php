@@ -135,43 +135,75 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-            <li class="sidebar-menu-group-title">Users</li>
-            <li class="dropdown">
-                <a href="javascript:void(0)">
-                    <iconify-icon icon="flowbite:users-group-outline" class="menu-icon"></iconify-icon>
-                    <span>Users</span>
-                </a>
-                <ul class="sidebar-submenu">
-                    <li>
-                        <a href="{{ route('users.list') }}"><i
-                                class="ri-circle-fill circle-icon {{ Arr::random($colors) }} w-auto"></i>
-                            Users Internal</a>
+            @can('sidebarMaster.view')
+                <li class="sidebar-menu-group-title">Master</li>
+                @can('sidebarBank.view')
+                    <li class="dropdown">
+                        <a href="javascript:void(0)">
+                            <iconify-icon icon="mingcute:storage-line" class="menu-icon"></iconify-icon>
+                            <span>Data Bank</span>
+                        </a>
+                        <ul class="sidebar-submenu">
+                            @can('bank.view')
+                                <li>
+                                    <a href="{{ route('bank.list') }}"><i
+                                            class="ri-circle-fill circle-icon text-primary-600 w-auto"></i>
+                                        List Bank</a>
+                                </li>
+                            @endcan
+                        </ul>
                     </li>
-                    <li>
-                        <a href="{{ route('usersEksternal.list') }}"><i
-                                class="ri-circle-fill circle-icon {{ Arr::random($colors) }} w-auto"></i>
-                            Users Eksternal</a>
-                    </li>
-                </ul>
-            </li>
-            <li class="dropdown">
-                <a href="javascript:void(0)">
-                    <i class="ri-user-settings-line text-xl me-14 d-flex w-auto"></i>
-                    <span>Role & Permission</span>
-                </a>
-                <ul class="sidebar-submenu">
-                    <li>
-                        <a href="{{ route('roles.list') }}"><i
-                                class="ri-circle-fill circle-icon {{ Arr::random($colors) }} w-auto"></i>
-                            Role</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('permissions.list') }}"><i
-                                class="ri-circle-fill circle-icon {{ Arr::random($colors) }} w-auto"></i>
-                            Permission</a>
-                    </li>
-                </ul>
-            </li>
+                @endcan
+            @endcan
+            @can('sidebarUsers.view')
+                <li class="sidebar-menu-group-title">Users</li>
+                <li class="dropdown">
+                    <a href="javascript:void(0)">
+                        <iconify-icon icon="flowbite:users-group-outline" class="menu-icon"></iconify-icon>
+                        <span>Users</span>
+                    </a>
+                    <ul class="sidebar-submenu">
+                        @can('users.view')
+                            <li>
+                                <a href="{{ route('users.list') }}"><i
+                                        class="ri-circle-fill circle-icon {{ Arr::random($colors) }} w-auto"></i>
+                                    Users Internal</a>
+                            </li>
+                        @endcan
+                        @can('userEksternal.view')
+                            <li>
+                                <a href="{{ route('usersEksternal.list') }}"><i
+                                        class="ri-circle-fill circle-icon {{ Arr::random($colors) }} w-auto"></i>
+                                    Users Eksternal</a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endcan
+            @can('sidebarRolePermissions.view')
+                <li class="dropdown">
+                    <a href="javascript:void(0)">
+                        <i class="ri-user-settings-line text-xl me-14 d-flex w-auto"></i>
+                        <span>Role & Permission</span>
+                    </a>
+                    <ul class="sidebar-submenu">
+                        @can('roles.view')
+                            <li>
+                                <a href="{{ route('roles.list') }}"><i
+                                        class="ri-circle-fill circle-icon {{ Arr::random($colors) }} w-auto"></i>
+                                    Role</a>
+                            </li>
+                        @endcan
+                        @can('permissions.view')
+                            <li>
+                                <a href="{{ route('permissions.list') }}"><i
+                                        class="ri-circle-fill circle-icon {{ Arr::random($colors) }} w-auto"></i>
+                                    Permission</a>
+                            </li>
+                        @endcan
+                    </ul>
+                </li>
+            @endcan
         </ul>
     </div>
 </aside>

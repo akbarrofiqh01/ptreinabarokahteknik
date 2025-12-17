@@ -32,9 +32,10 @@ class ProfileController extends Controller
         $user = $request->user();
         $data = $request->validated();
 
+        $user->username = $data['username'];
         $user->name = $data['fullname'];
         $user->email = $data['email'];
-        $user->user_phone = $data['usr_number'];
+        $user->phone = $data['usr_number'];
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
@@ -48,9 +49,10 @@ class ProfileController extends Controller
                 'success' => true,
                 'message' => 'Profil berhasil diperbarui.',
                 'data' => [
-                    'fullname' => $user->fullname,
+                    'username' => $user->username,
+                    'name' => $user->name,
                     'email' => $user->email,
-                    'user_phone' => $user->user_phone,
+                    'phone' => $user->phone,
                 ]
             ]);
         }

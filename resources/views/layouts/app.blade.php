@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="{{ asset('assets/backend/css/lib/audioplayer.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/backend/css/style.css') }}">
     <script src="{{ asset('assets/backend/js/lib/jquery-3.7.1.min.js') }}"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
@@ -147,7 +148,7 @@
 
     <!-- jQuery library js -->
     <script src="{{ asset('assets/backend/js/lib/bootstrap.bundle.min.js') }}"></script>
-    {{-- <script src="{{ asset('assets/backend/js/lib/apexcharts.min.js') }}"></script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="{{ asset('assets/backend/js/lib/dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/lib/iconify-icon.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/lib/jquery-ui.min.js') }}"></script>

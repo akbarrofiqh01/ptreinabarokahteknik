@@ -75,7 +75,7 @@
                             @endif
 
                             <!-- Submit Buttons -->
-                            @can('create roles')
+                            @can('roles.create')
                                 <div class="col-12 mt-24 d-flex flex-column gap-2">
 
                                     <button type="submit" id="SubmitBtn"
@@ -123,7 +123,7 @@
                                             {{ $rowRoles->permissions->pluck('name')->implode(',') }}</td>
                                         <td>{{ \Carbon\Carbon::parse($rowRoles->created)->format('d M, Y') }}</td>
                                         <td>
-                                            @can('edit roles')
+                                            @can('roles.edit')
                                                 <a data-href="{{ route('roles.edit', ['roleCode' => $rowRoles->code_role]) }}"
                                                     data-bs-title="Edit Role" data-bs-remote="false" data-bs-toggle="modal"
                                                     data-bs-target="#dinamicModal" data-bs-backdrop="static"
@@ -132,7 +132,7 @@
                                                     <iconify-icon icon="lucide:edit"></iconify-icon>
                                                 </a>
                                             @endcan
-                                            @can('delete roles')
+                                            @can('roles.delete')
                                                 <a href="javascript:void(0)"
                                                     class="w-32-px h-32-px bg-danger-focus text-danger-main rounded-circle d-inline-flex align-items-center justify-content-center"
                                                     onclick="hapusConfirm('{{ $rowRoles->code_role }}')" title="Hapus Role">

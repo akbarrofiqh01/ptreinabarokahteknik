@@ -23,9 +23,15 @@
                         <h6 class="text-xl mb-16">Personal Info</h6>
                         <ul>
                             <li class="d-flex align-items-center gap-1 mb-12">
+                                <span class="w-30 text-md fw-semibold text-primary-light">Username</span>
+                                <span class="w-70 text-secondary-light fw-medium" id="displayUsername">
+                                    : {{ Auth()->user()->username }}
+                                </span>
+                            </li>
+                            <li class="d-flex align-items-center gap-1 mb-12">
                                 <span class="w-30 text-md fw-semibold text-primary-light">Nama</span>
                                 <span class="w-70 text-secondary-light fw-medium" id="displayFullname">
-                                    : {{ Auth()->user()->fullname }}
+                                    : {{ Auth()->user()->name }}
                                 </span>
                             </li>
                             <li class="d-flex align-items-center gap-1 mb-12">
@@ -37,7 +43,7 @@
                             <li class="d-flex align-items-center gap-1 mb-12">
                                 <span class="w-30 text-md fw-semibold text-primary-light"> No Telp</span>
                                 <span class="w-70 text-secondary-light fw-medium" id="displayPhone">
-                                    : {{ Auth()->user()->user_phone }}
+                                    : {{ Auth()->user()->phone }}
                                 </span>
                             </li>
                             <li class="d-flex align-items-center gap-1 mb-12">
@@ -162,11 +168,21 @@
                                     <div class="col-12">
                                         <div class="mb-20">
                                             <label for="name"
+                                                class="form-label fw-semibold text-primary-light text-sm mb-8">Username
+                                                <span class="text-danger-600">*</span></label>
+                                            <input type="text" class="form-control radius-8" name="username"
+                                                placeholder="Masukkan username anda...."
+                                                value="{{ Auth()->user()->username }}" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="mb-20">
+                                            <label for="name"
                                                 class="form-label fw-semibold text-primary-light text-sm mb-8">Nama Lengkap
                                                 <span class="text-danger-600">*</span></label>
                                             <input type="text" class="form-control radius-8" name="fullname"
                                                 placeholder="Masukkan nama lengkap anda...."
-                                                value="{{ Auth()->user()->fullname }}" autocomplete="off">
+                                                value="{{ Auth()->user()->name }}" autocomplete="off">
                                         </div>
                                     </div>
                                     <div class="col-12">
@@ -186,7 +202,7 @@
                                                 Telp</label>
                                             <input type="text" class="form-control radius-8" name="usr_number"
                                                 placeholder="Masukkan no telp anda...."
-                                                value="{{ Auth()->user()->user_phone }}" autocomplete="off">
+                                                value="{{ Auth()->user()->phone }}" autocomplete="off">
                                         </div>
                                     </div>
                                 </div>
@@ -234,12 +250,14 @@
                                                 showConfirmButton: false
                                             }).then(() => {
                                                 if (response.data.data) {
+                                                    document.querySelector('input[name="username"]').value = response.data.data
+                                                        .username || '';
                                                     document.querySelector('input[name="fullname"]').value = response.data.data
-                                                        .fullname || '';
+                                                        .name || '';
                                                     document.querySelector('input[name="email"]').value = response.data.data
                                                         .email || '';
                                                     document.querySelector('input[name="usr_number"]').value = response.data
-                                                        .data.user_phone || '';
+                                                        .data.phone || '';
                                                 }
                                                 updatePersonalInfoDisplay(response.data.data);
                                             });
@@ -278,24 +296,29 @@
                                 function updatePersonalInfoDisplay(data) {
                                     if (!data) return;
 
-                                    if (data.fullname && document.getElementById('displayHeadFullname')) {
-                                        document.getElementById('displayHeadFullname').innerHTML = `${data.fullname}`;
+
+                                    if (data.name && document.getElementById('displayHeadFullname')) {
+                                        document.getElementById('displayHeadFullname').innerHTML = `${data.name}`;
                                     }
 
                                     if (data.email && document.getElementById('displayHeadEmail')) {
                                         document.getElementById('displayHeadEmail').innerHTML = `${data.email}`;
                                     }
 
-                                    if (data.fullname && document.getElementById('displayFullname')) {
-                                        document.getElementById('displayFullname').innerHTML = `: ${data.fullname}`;
+                                    if (data.username && document.getElementById('displayUsername')) {
+                                        document.getElementById('displayUsername').innerHTML = `: ${data.username}`;
+                                    }
+
+                                    if (data.name && document.getElementById('displayFullname')) {
+                                        document.getElementById('displayFullname').innerHTML = `: ${data.name}`;
                                     }
 
                                     if (data.email && document.getElementById('displayEmail')) {
                                         document.getElementById('displayEmail').innerHTML = `: ${data.email}`;
                                     }
 
-                                    if (data.user_phone !== undefined && document.getElementById('displayPhone')) {
-                                        const phoneDisplay = data.user_phone ? `: ${data.user_phone}` : ': -';
+                                    if (data.phone !== undefined && document.getElementById('displayPhone')) {
+                                        const phoneDisplay = data.phone ? `: ${data.phone}` : ': -';
                                         document.getElementById('displayPhone').innerHTML = phoneDisplay;
                                     }
 

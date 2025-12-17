@@ -1,3 +1,27 @@
+<style>
+    .permissions-wrapper {
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 12px 16px;
+        max-height: 260px;
+        overflow-y: auto;
+        background-color: #fafafa;
+    }
+
+    .permissions-wrapper::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .permissions-wrapper::-webkit-scrollbar-thumb {
+        background-color: #cbd5e1;
+        border-radius: 4px;
+    }
+
+    .permissions-wrapper::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+</style>
+
 <form id="formUpdRoles">
     <div class="row">
         <div class="col-12 mb-20">
@@ -10,27 +34,26 @@
                 <label class="form-label fw-semibold text-primary-light text-sm mb-8">
                     Permissions
                 </label>
-                <div class="d-flex align-items-center flex-wrap gap-28">
-                    @foreach ($dataPermissions as $permissions)
-                        <div class="form-check checked-primary d-flex align-items-center gap-2">
 
-                            <input class="form-check-input" type="checkbox"
-                                id="permission_upd_{{ $permissions->code_permissions }}" name="permissionsUpd[]"
-                                value="{{ $permissions->name }}"
-                                {{ $hasPermissions->contains($permissions->name) ? 'checked' : '' }}>
+                <div class="permissions-wrapper">
+                    <div class="d-flex flex-column gap-12">
+                        @foreach ($dataPermissions as $permissions)
+                            <div class="form-check checked-primary d-flex align-items-center gap-2">
+                                <input class="form-check-input" type="checkbox"
+                                    id="permission_upd_{{ $permissions->code_permissions }}" name="permissionsUpd[]"
+                                    value="{{ $permissions->name }}"
+                                    {{ $hasPermissions->contains($permissions->name) ? 'checked' : '' }}>
 
-                            <label class="form-check-label line-height-1 fw-medium text-secondary-light text-sm"
-                                for="permission_upd_{{ $permissions->code_permissions }}">
-                                {{ $permissions->name }}
-                            </label>
-
-                        </div>
-                    @endforeach
+                                <label class="form-check-label fw-medium text-secondary-light text-sm"
+                                    for="permission_upd_{{ $permissions->code_permissions }}">
+                                    {{ $permissions->name }}
+                                </label>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
             </div>
         @endif
-
-
         <div class="col-12 mb-20">
             <button type="submit" id="SubmitBtn01"
                 class="btn btn-primary border border-primary-600 text-md px-48 py-12 radius-8 w-100">Ubah

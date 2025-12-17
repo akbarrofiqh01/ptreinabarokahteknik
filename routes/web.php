@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BankController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FacultiesController;
 use App\Http\Controllers\JenjangController;
@@ -48,10 +49,20 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/users/data-users-eksternal', [UserEksternalController::class, 'index'])->name('usersEksternal.list');
     Route::get('/users/edit-users-eksternal/{usercode}', [UserEksternalController::class, 'edit'])->name('usersEksternal.edit');
+    Route::get('/users/detil-users-eksternal/{usercode}', [UserEksternalController::class, 'detil'])->name('usersEksternal.detil');
     Route::put('/users/update-users-eksternal/{usercode}', [UserEksternalController::class, 'update'])->name('users.update');
     Route::get('/users/user-eksternal-promote-internal/{usercode}', [UserEksternalController::class, 'permitInternalForm'])->name('usersEksternal.permitInternal');
     Route::post('/users/approve-user-eksternal-permit-internal/{usercode}', [UserEksternalController::class, 'permitInternalStore'])->name('usersEksternal.permitInternal.store');
+    Route::post('/users/users-eksternal-suspend/{usercode}', [UserEksternalController::class, 'suspend'])->name('usersEksternal.suspend');
     Route::post('/users/users-eksternal-approve/{usercode}', [UserEksternalController::class, 'approve'])->name('usersEksternal.approve');
+    Route::delete('/users/users-eksternal-delete/{usercode}', [UserEksternalController::class, 'destroy']);
+
+    Route::get('/master/data-bank/list-bank', [BankController::class, 'index'])->name('bank.list');
+    Route::get('/master/data-bank/tambah-bank', [BankController::class, 'create'])->name('bank.create');
+    Route::post('/master/data-bank/newbank', [BankController::class, 'store'])->name('bank.store');
+    Route::get('/master/data-bank/edit-bank/{bnkcode}', [BankController::class, 'edit'])->name('bank.edit');
+    Route::put('/master/data-bank/Updatebank/{bnkcode}', [BankController::class, 'update'])->name('bank.update');
+    Route::delete('/master/data-bank/Deletebank/{usercode}', [BankController::class, 'destroy']);
 });
 
 

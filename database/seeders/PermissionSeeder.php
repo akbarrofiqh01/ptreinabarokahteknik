@@ -41,15 +41,42 @@ class PermissionSeeder extends Seeder
             // LOG
             'transaction-log.view',
 
-            'view dashboard',
-            'view roles',
-            'create roles',
-            'edit roles',
-            'delete roles',
-            'view permissions',
-            'create permissions',
-            'edit permissions',
-            'delete permissions',
+            'dashboard.view',
+            //roles permission
+            'roles.view',
+            'roles.create',
+            'roles.edit',
+            'roles.delete',
+
+            //permissions
+            'permissions.view',
+            'permissions.create',
+            'permissions.edit',
+            'permissions.delete',
+
+            //userInternal permission
+            'users.view',
+            'users.create',
+            'users.edit',
+            'users.delete',
+
+            //userEksternal permission
+            'userEksternal.view',
+            'userEksternal.create',
+            'userEksternal.edit',
+            'userEksternal.delete',
+
+            //permission Bank
+            'bank.view',
+            'bank.create',
+            'bank.edit',
+            'bank.delete',
+
+            //permission view sidebar
+            'sidebarUsers.view',
+            'sidebarRolePermissions.view',
+            'sidebarMaster.view',
+            'sidebarBank.view',
         ];
 
         foreach ($permissions as $permission) {

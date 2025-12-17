@@ -52,6 +52,18 @@ class UserEksternalController extends Controller implements HasMiddleware
         ]);
     }
 
+    public function detil(string $id)
+    {
+        $dataUsers = User::with(['roles', 'company'])
+            ->where('source', 'register')
+            ->where('code_user', $id)
+            ->orderByDesc('id')
+            ->first();
+        return view('modal.user.detil-user-eksternal', [
+            'userdata'          => $dataUsers
+        ]);
+    }
+
     public function approve(string $id)
     {
         $user = User::where('code_user', $id)
@@ -117,6 +129,17 @@ class UserEksternalController extends Controller implements HasMiddleware
         ]);
     }
 
+    public function suspend($codeUser)
+    {
+        $user = User::where('code_user', $codeUser)->firstOrFail();
+        $user->status = 'suspended';
+        $user->save();
+
+        return response()->json([
+            'message' => 'User berhasil disuspend.'
+        ]);
+    }
+
     public function update(Request $request, string $id)
     {
         $validated = $request->validate([
@@ -166,6 +189,16 @@ class UserEksternalController extends Controller implements HasMiddleware
         return response()->json([
             'message'    => 'Data user eksternal berhasil diperbarui!',
             'csrf_token' => csrf_token()
+        ]);
+    }
+
+    public function destroy(string $id)
+    {
+        $dataUsers = User::where('code_user', $id)->firstOrFail();
+        $dataUsers->delete();
+        return response()->json([
+            'message'           => 'User berhasil dihapus!',
+            'csrf_token'        => csrf_token()
         ]);
     }
 }
