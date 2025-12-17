@@ -1,20 +1,11 @@
 @extends('layouts.app')
-@section('title', 'Users Internal - PT Reina Barokah Teknik')
-@section('title-content', 'Users Internal')
+@section('title', 'Users Eksternal - PT Reina Barokah Teknik')
+@section('title-content', 'Users Eksternal')
 @section('content')
     <div class="card h-100 p-0 radius-12">
         <div
             class="card-header border-bottom bg-base py-16 px-24 d-flex align-items-center flex-wrap gap-3 justify-content-between">
-            <h5 class="card-title">Data Users</h5>
-
-            @can('create users')
-                <a data-href="{{ route('users.create') }}" data-bs-title="Tambah Users" data-bs-remote="false"
-                    data-bs-toggle="modal" data-bs-target="#dinamicModal" data-bs-backdrop="static" data-bs-keyboard="false"
-                    class="btn btn-primary text-sm btn-sm px-12 py-12 radius-8 d-flex align-items-center gap-2">
-                    <iconify-icon icon="ic:baseline-plus" class="icon text-xl line-height-1"></iconify-icon> Users
-                </a>
-            @endcan
-
+            <h5 class="card-title">Data Users Eksternal</h5>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -24,13 +15,14 @@
                             <th width="5%">No</th>
                             <th>User</th>
                             <th>Email</th>
-                            <th width="15%">Role</th>
+                            <th>Role</th>
+                            <th>Status</th>
                             <th>Dibuat</th>
                             <th width="15%">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($datausers as $show)
+                        @foreach ($dataUsers as $show)
                             <tr>
                                 <td class="text-center">{{ $loop->iteration }}</td>
 
@@ -55,6 +47,8 @@
                                                     @<span>{{ $show->username }}</span>
                                                 </small>
                                             @endif
+                                            <small class="text-muted text-truncate d-block"
+                                                style="max-width: 150px;"><span>{{ $show->company->name }}</span></small>
                                         </div>
                                     </div>
                                 </td>
@@ -86,7 +80,21 @@
                                         @endif
                                     </div>
                                 </td>
-
+                                <td>
+                                    @if ($show->status === 'pending')
+                                        <span class="badge bg-warning bg-opacity-10 text-warning">
+                                            Pending
+                                        </span>
+                                    @elseif ($show->status === 'active')
+                                        <span class="badge bg-success bg-opacity-10 text-success">
+                                            Active
+                                        </span>
+                                    @elseif ($show->status === 'suspended')
+                                        <span class="badge bg-danger bg-opacity-10 text-danger">
+                                            Suspended
+                                        </span>
+                                    @endif
+                                </td>
                                 <!-- Created -->
                                 <td>
                                     <div class="text-nowrap">
@@ -102,19 +110,42 @@
                                 <td>
                                     <div class="d-flex flex-wrap gap-1">
                                         @can('edit users')
-                                            <!-- Edit Data User -->
+                                            @if ($show->status === 'pending')
+                                                <button type="button" onclick="approveUser('{{ $show->code_user }}')"
+                                                    class="w-32-px h-32-px bg-success-focus text-primary-main rounded-circle d-inline-flex align-items-center justify-content-center"
+                                                    title="Approve User">
+                                                    <iconify-icon icon="solar:check-circle-outline"></iconify-icon>
+                                                </button>
+                                            @else
+                                                @role('superadmin')
+                                                    @if ($show->source === 'register' && $show->status === 'active' && $show->hasRole('user'))
+                                                        <button type="button"
+                                                            data-href="{{ route('usersEksternal.permitInternal', ['usercode' => $show->code_user]) }}"
+                                                            data-bs-title="Promote User to Internal" data-bs-toggle="modal"
+                                                            data-bs-target="#dinamicModal" data-bs-backdrop="static"
+                                                            data-bs-keyboard="false"
+                                                            class="w-32-px h-32-px bg-info-focus text-info-main rounded-circle d-inline-flex align-items-center justify-content-center"
+                                                            title="Promote to Internal">
+                                                            <iconify-icon icon="solar:user-plus-outline"></iconify-icon>
+                                                        </button>
+                                                    @endif
+                                                @endrole
+                                            @endif
                                             <button type="button"
-                                                data-href="{{ route('users.edit', ['usercode' => $show->code_user]) }}"
-                                                data-bs-title="Edit User" data-bs-toggle="modal" data-bs-target="#dinamicModal"
-                                                data-bs-backdrop="static" data-bs-keyboard="false"
-                                                class="w-32-px h-32-px bg-success-focus text-success-main rounded-circle d-inline-flex align-items-center justify-content-center">
+                                                data-href="{{ route('usersEksternal.edit', ['usercode' => $show->code_user]) }}"
+                                                data-bs-title="Edit User Eksternal" data-bs-toggle="modal"
+                                                data-bs-target="#dinamicModal" data-bs-backdrop="static"
+                                                data-bs-keyboard="false"
+                                                class="w-32-px h-32-px bg-success-focus text-success-main rounded-circle d-inline-flex align-items-center justify-content-center"
+                                                title="Edit User Eksternal">
                                                 <iconify-icon icon="tabler:edit" class="me-1"></iconify-icon>
                                             </button>
                                         @endcan
 
                                         @can('delete users')
                                             <button type="button" onclick="hapusConfirm('{{ $show->code_user }}')"
-                                                class="w-32-px h-32-px bg-danger-focus text-danger-main rounded-circle d-inline-flex align-items-center justify-content-center">
+                                                class="w-32-px h-32-px bg-danger-focus text-danger-main rounded-circle d-inline-flex align-items-center justify-content-center"
+                                                title="Hapus User Eksternal">
                                                 <iconify-icon icon="mingcute:delete-2-line" class="me-1"></iconify-icon>
                                             </button>
                                         @endcan
@@ -134,6 +165,47 @@
             });
         });
 
+        function approveUser(userCode) {
+            Swal.fire({
+                title: 'Apakah Anda Yakin ?',
+                text: 'User ini akan diaktifkan dan dapat login.',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, Approve',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                    axios.post(`/users/users-eksternal-approve/${userCode}`, {}, {
+                            headers: {
+                                'X-CSRF-TOKEN': token
+                            }
+                        })
+                        .then(function(response) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil',
+                                text: response.data.message,
+                                timer: 1500,
+                                showConfirmButton: false
+                            }).then(() => {
+                                window.location.reload();
+                            });
+                        })
+                        .catch(function(error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal',
+                                text: error.response?.data?.message ?? 'Terjadi kesalahan.'
+                            });
+                        });
+                }
+            });
+        }
+
         function hapusConfirm(userId) {
             Swal.fire({
                 title: 'Apakah anda yakin?',
@@ -148,7 +220,7 @@
                 if (result.isConfirmed) {
                     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-                    axios.delete(`/users/deleteUserInternal/${userId}`, {
+                    axios.delete(`/users/deleteUser/${userId}`, {
                             id: userId,
                         }, {
                             headers: {
@@ -177,6 +249,48 @@
                                 icon: 'error',
                                 title: 'Gagal',
                                 text: errorMessage
+                            });
+                        });
+                }
+            });
+        }
+
+        function impersonateUser(codeUser) {
+            Swal.fire({
+                title: 'View sebagai user?',
+                text: 'Anda akan melihat sistem sebagai user ini.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, lanjutkan',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    const token = document
+                        .querySelector('meta[name="csrf-token"]')
+                        .getAttribute('content');
+
+                    axios.post(`/impersonate/${codeUser}`, {}, {
+                            headers: {
+                                'X-CSRF-TOKEN': token
+                            }
+                        })
+                        .then(res => {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil',
+                                text: 'Sekarang Anda melihat sebagai user',
+                                timer: 1200,
+                                showConfirmButton: false
+                            }).then(() => {
+                                window.location.href = "{{ route('dashboard') }}";
+                            });
+                        })
+                        .catch(err => {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal',
+                                text: err.response?.data?.message || 'Tidak dapat impersonate user'
                             });
                         });
                 }

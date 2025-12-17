@@ -25,12 +25,15 @@ class UserController extends Controller implements HasMiddleware
     {
         if (auth()->user()->hasRole('superadmin')) {
             $dataUsers = User::with('roles')
+                ->where('source', 'admin')
                 ->orderBy('id', 'DESC')
                 ->get();
         } else {
-            $dataUsers = User::whereDoesntHave('roles', function ($q) {
-                $q->where('name', 'superadmin');
-            })->with('roles')
+            $dataUsers = User::with('roles')
+                ->where('source', 'admin')
+                ->whereDoesntHave('roles', function ($q) {
+                    $q->where('name', 'superadmin');
+                })
                 ->orderBy('id', 'DESC')
                 ->get();
         }
@@ -95,6 +98,8 @@ class UserController extends Controller implements HasMiddleware
         $createUser->name   = $request->name;
         $createUser->email  = $request->email;
         $createUser->phone  = $request->phone;
+        $createUser->source = 'admin';
+        $createUser->status = 'active';
         $createUser->password  = Hash::make($request->password);
         $createUser->code_user = Str::random(60);
         $createUser->syncRoles($request->role);

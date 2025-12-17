@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             PermissionSeeder::class,
+            CompanySeeder::class,
             UserSeeder::class,
         ]);
         $superAdmin = User::create([
@@ -27,6 +28,8 @@ class DatabaseSeeder extends Seeder
             'username' => 'superadmin',
             'phone' => '+6287752729835',
             'email' => 'superadmin@admin.com',
+            'status' => 'active',
+            'source' => 'admin',
             'password' => Hash::make('password'),
             'code_user' => Str::random(60),
         ]);

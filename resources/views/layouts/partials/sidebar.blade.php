@@ -6,6 +6,7 @@
         'text-warning-600',
         'text-info-600',
         'text-purple-600',
+        'text-secondary-600',
     ];
 @endphp
 
@@ -144,7 +145,12 @@
                     <li>
                         <a href="{{ route('users.list') }}"><i
                                 class="ri-circle-fill circle-icon {{ Arr::random($colors) }} w-auto"></i>
-                            Users</a>
+                            Users Internal</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('usersEksternal.list') }}"><i
+                                class="ri-circle-fill circle-icon {{ Arr::random($colors) }} w-auto"></i>
+                            Users Eksternal</a>
                     </li>
                 </ul>
             </li>

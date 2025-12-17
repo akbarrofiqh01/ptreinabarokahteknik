@@ -28,6 +28,6 @@ class Transaction extends Model
 
     public function logs()
     {
-        return $this->hasMany(Transaction_log::class);
+        return $this->hasMany(TransactionLog::class);
     }
 }

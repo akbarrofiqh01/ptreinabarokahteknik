@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Transaction;
+
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -50,6 +52,11 @@ class User extends Authenticatable
 
     public function transactionLogs()
     {
-        return $this->hasMany(Transaction_log::class, 'actor_id');
+        return $this->hasMany(TransactionLog::class, 'actor_id');
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'company_id');
     }
 }

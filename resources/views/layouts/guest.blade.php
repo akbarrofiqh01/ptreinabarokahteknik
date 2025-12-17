@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="{{ asset('assets/backend/css/lib/file-upload.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/backend/css/lib/audioplayer.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/backend/css/style.css') }}">
+    <script src="{{ asset('assets/backend/js/lib/jquery-3.7.1.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
@@ -84,29 +85,8 @@
 <body>
 
     <div class="body-overlay"></div>
+    @yield('content')
 
-    <section class="auth bg-base d-flex flex-wrap">
-        <div class="auth-left d-lg-block d-none">
-            <div class="d-flex align-items-center flex-column h-100 justify-content-center">
-                <img src="{{ asset('assets/backend/logo_png.png') }}" alt="Image">
-            </div>
-        </div>
-        <div class="auth-right py-32 px-24 d-flex flex-column justify-content-center">
-            <div class="max-w-464-px mx-auto w-100">
-                <div>
-                    <a href="{{ route('login') }}" class="mb-40 max-w-290-px" style="width: 168px;height: 40px;">
-                        <img src="{{ asset('assets/backend/logo_landscape.png') }}" alt="Image">
-                    </a>
-                    <h4 class="mb-12">Selamat Datang</h4>
-                    <p class="mb-32 text-secondary-light text-lg">Silahkan masukkan akun anda
-                    </p>
-                </div>
-                @yield('content')
-            </div>
-        </div>
-    </section>
-
-    <script src="{{ asset('assets/backend/js/lib/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/lib/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/lib/apexcharts.min.js') }}"></script>
     <script src="{{ asset('assets/backend/js/lib/dataTables.min.js') }}"></script>

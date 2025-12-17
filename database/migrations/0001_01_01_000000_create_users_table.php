@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('company_id')->nullable()->after('id');
+            $table->foreign('company_id')->references('id')->on('companies')->nullOnDelete();
             $table->string('name');
             $table->string('username')->unique();
             $table->string('email')->unique();
@@ -21,11 +23,15 @@ return new class extends Migration
             $table->string('avatar')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->enum('status', ['pending', 'active', 'suspended'])->default('pending');
+            $table->enum('source', ['admin', 'register'])->default('register');
+            $table->unsignedBigInteger('created_by')->nullable();
             $table->boolean('is_active')->default(true);
             $table->string('code_user')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
+
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();

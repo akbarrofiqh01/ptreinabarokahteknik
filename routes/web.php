@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FacultiesController;
 use App\Http\Controllers\JenjangController;
 use App\Http\Controllers\ObatController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProgramsController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserEksternalController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -37,12 +39,20 @@ Route::middleware('auth')->group(function () {
     Route::put('/pengaturan/roles/updateRoles{roleCode}', [RoleController::class, 'update'])->name('roles.update');
     Route::delete('/pengaturan/roles/deleteRoles/{roleCode}', [RoleController::class, 'destroy']);
 
-    Route::get('/users/data-user', [UserController::class, 'index'])->name('users.list');
-    Route::get('/users/tambahUser', [UserController::class, 'create'])->name('users.create');
-    Route::post('/users/postUserBaru', [UserController::class, 'store'])->name('users.store');
-    Route::get('/users/editUser/{usercode}', [UserController::class, 'edit'])->name('users.edit');
-    Route::put('/pengaturan/users/updateUser/{usercode}', [UserController::class, 'update'])->name('users.update');
-    Route::delete('/pengaturan/users/deleteUser/{usercode}', [UserController::class, 'destroy']);
+    Route::get('/users/data-users-internal', [UserController::class, 'index'])->name('users.list');
+    Route::get('/users/tambah-users-internal', [UserController::class, 'create'])->name('users.create');
+    Route::post('/users/postUserInternalBaru', [UserController::class, 'store'])->name('users.store');
+    Route::get('/users/edit-users-internal/{usercode}', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/updateUserInternal/{usercode}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('/users/deleteUserInternal/{usercode}', [UserController::class, 'destroy']);
+
+    Route::get('/users/data-users-eksternal', [UserEksternalController::class, 'index'])->name('usersEksternal.list');
+    Route::get('/users/edit-users-eksternal/{usercode}', [UserEksternalController::class, 'edit'])->name('usersEksternal.edit');
+    Route::put('/users/update-users-eksternal/{usercode}', [UserEksternalController::class, 'update'])->name('users.update');
+    Route::get('/users/user-eksternal-promote-internal/{usercode}', [UserEksternalController::class, 'permitInternalForm'])->name('usersEksternal.permitInternal');
+    Route::post('/users/approve-user-eksternal-permit-internal/{usercode}', [UserEksternalController::class, 'permitInternalStore'])->name('usersEksternal.permitInternal.store');
+    Route::post('/users/users-eksternal-approve/{usercode}', [UserEksternalController::class, 'approve'])->name('usersEksternal.approve');
 });
+
 
 require __DIR__ . '/auth.php';

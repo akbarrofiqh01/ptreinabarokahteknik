@@ -2,6 +2,26 @@
 @section('title', 'Dashboard - Siakad')
 @section('title-content', 'Dashboard')
 @section('content')
+    @if (session()->has('impersonate_user_id'))
+        <button type="button" onclick="stopImpersonate()" class="btn btn-danger btn-sm">
+            <iconify-icon icon="solar:logout-outline"></iconify-icon>
+            Kembali ke Superadmin
+        </button>
+    @endif
+    <script>
+        function stopImpersonate() {
+            const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            axios.post('/impersonate/stop', {}, {
+                    headers: {
+                        'X-CSRF-TOKEN': token
+                    }
+                })
+                .then(() => {
+                    window.location.href = "{{ route('dashboard') }}";
+                });
+        }
+    </script>
 
     <div class="row row-cols-xxxl-5 row-cols-lg-3 row-cols-sm-2 row-cols-1 gy-4">
         <div class="col">
@@ -12,7 +32,8 @@
                             <p class="fw-medium text-primary-light mb-1">Total Users</p>
                             <h6 class="mb-0">20,000</h6>
                         </div>
-                        <div class="w-50-px h-50-px bg-cyan rounded-circle d-flex justify-content-center align-items-center">
+                        <div
+                            class="w-50-px h-50-px bg-cyan rounded-circle d-flex justify-content-center align-items-center">
                             <iconify-icon icon="gridicons:multiple-users" class="text-white text-2xl mb-0"></iconify-icon>
                         </div>
                     </div>
